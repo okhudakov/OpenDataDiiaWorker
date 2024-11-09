@@ -21,7 +21,7 @@ services:
       - DB_URI=${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}
     labels:
       chadburn.enabled: "true"
-      chadburn.job-exec.datecron.schedule: "@every 1h"
+      chadburn.job-exec.datecron.schedule: "@every 2190h"
       chadburn.job-exec.datecron.command: "poetry run python oddw/main.py"
 
   chadburn:
