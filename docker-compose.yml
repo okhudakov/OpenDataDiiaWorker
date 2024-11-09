@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - PGUSER=${DB_USERNAME}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+
+  oddw:
+    build:
+      context: .
+    volumes:
+      - .:/oddw
+    depends_on:
+      - db
+    environment:
+      - DB_URI=${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}
+    labels:
+      chadburn.enabled: "true"
+      chadburn.job-exec.datecron.schedule: "@every 1h"
+      chadburn.job-exec.datecron.command: "poetry run python oddw/main.py"
+
+  chadburn:
+    image: premoweb/chadburn:latest
+    depends_on:
+      - oddw
+    command: daemon
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      chadburn.enabled: "true"
