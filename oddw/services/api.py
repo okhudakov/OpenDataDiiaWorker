@@ -4,6 +4,7 @@ import asyncio
 import requests
 import os
 import sys
+
 sys.path.append(os.getcwd())
 from oddw.settings import env
 from oddw.utils import flatten
