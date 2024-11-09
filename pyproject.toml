@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "opendatadiiaworker"
+version = "0.1.0"
+description = ""
+authors = ["o.khudakov <o.khudakov@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+alembic = "^1.14.0"
+sqlalchemy = "^2.0.36"
+requests = "^2.32.3"
+asyncio = "^3.4.3"
+aiohttp = "^3.10.10"
+psutil = "^6.1.0"
+python-dotenv = "^1.0.1"
+psycopg2-binary = "^2.9.10"
+asyncpg = "^0.30.0"
+black = "^24.10.0"
+pydantic = "^2.9.2"
+pydantic-settings = "^2.6.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
