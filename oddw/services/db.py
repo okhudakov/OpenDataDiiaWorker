@@ -19,10 +19,7 @@ class DBService:
         try:
             new_item = model(**omit_if_none(atts))
 
-            query = (
-                select(Record)
-                .where(Record.idf == new_item.idf)
-            )
+            query = select(Record).where(Record.idf == new_item.idf)
             result = await self.db_session.execute(query)
             record = result.scalars().first()
 
@@ -51,40 +48,33 @@ async def test_func(record):
     async with async_session() as db_session:
         async with db_session.begin():
             db = DBService(db_session)
-            await db.create_update_record(Record, **{
-                "idf": record["results"][0]["asc_org"]["idf"],
-                "name": record["results"][0]["asc_org"]["name"],
-                "asc_org": json.dumps(record["results"][0]["asc_org"]),
-                "general_data": json.dumps(
-                    record["results"][0]["general_data"]
-                ),
-                "activity_data": json.dumps(
-                    record["results"][0]["activity_data"]
-                ),
-                "info_support_data": json.dumps(
-                    record["results"][0]["info_support_data"]
-                ),
-                "admin_service_data": json.dumps(
-                    record["results"][0]["admin_service_data"]
-                ),
-                "resp_person_data": json.dumps(
-                    record["results"][0]["resp_person_data"]
-                ),
-            })
+            await db.create_update_record(
+                Record,
+                **{
+                    "idf": record["results"][0]["asc_org"]["idf"],
+                    "name": record["results"][0]["asc_org"]["name"],
+                    "asc_org": json.dumps(record["results"][0]["asc_org"]),
+                    "general_data": json.dumps(record["results"][0]["general_data"]),
+                    "activity_data": json.dumps(record["results"][0]["activity_data"]),
+                    "info_support_data": json.dumps(
+                        record["results"][0]["info_support_data"]
+                    ),
+                    "admin_service_data": json.dumps(
+                        record["results"][0]["admin_service_data"]
+                    ),
+                    "resp_person_data": json.dumps(
+                        record["results"][0]["resp_person_data"]
+                    ),
+                }
+            )
 
 
 async def merge_report_details(records):
     async with engine.begin() as conn:
-        tasks = [
-            asyncio.create_task(
-                test_func(record)
-            )
-            for record in records
-        ]
+        tasks = [asyncio.create_task(test_func(record)) for record in records]
 
         responses = await asyncio.gather(*tasks)
         ress = []
         for response in responses:
             if response is not None:
                 ress.append(await response.json())
-
